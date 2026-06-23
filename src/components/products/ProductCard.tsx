@@ -1,7 +1,11 @@
-import type { CSSProperties } from 'react'
+import type { CSSProperties, MouseEvent } from 'react'
+import { HiOutlinePlus } from 'react-icons/hi2'
 import type { ShowcaseProduct } from '../../data/products'
 import { getBrandLine } from '../../data/productBrand'
 import { useProductModal } from '../../context/ProductModalContext'
+import { useCart } from '../../context/CartContext'
+import { useToast } from '../../context/ToastContext'
+import { formatPrice } from '../../utils/formatPrice'
 
 type ProductCardProps = {
   product: ShowcaseProduct
@@ -9,16 +13,25 @@ type ProductCardProps = {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { openProduct } = useProductModal()
+  const { addToCart } = useCart()
+  const { showToast } = useToast()
   const brand = getBrandLine(product.brandLine)
   const isDarkBand = product.brandLine === 'power' || product.brandLine === 'max'
 
+  function handleAddToCart(event: MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation()
+    event.preventDefault()
+    addToCart(product)
+    showToast('Product added to cart', 'success')
+  }
+
   return (
-    <button
-      type="button"
-      onClick={() => openProduct(product.id)}
-      className="block w-full cursor-pointer text-left"
-    >
-      <article className="product-carousel-card group w-[210px] shrink-0 sm:w-[240px] md:w-[260px]">
+    <article className="product-carousel-card group relative w-[210px] shrink-0 sm:w-[240px] md:w-[260px]">
+      <button
+        type="button"
+        onClick={() => openProduct(product.id)}
+        className="block w-full cursor-pointer text-left"
+      >
         <div className="product-label-card overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.18)]">
           <div className="relative bg-white px-4 pt-5 pb-3">
             <div className="relative mx-auto aspect-square w-full max-w-[180px] overflow-hidden rounded-xl bg-brand-cream/20 transition-transform duration-700 group-hover:scale-[1.03]">
@@ -56,9 +69,21 @@ export function ProductCard({ product }: ProductCardProps) {
             >
               {product.name}
             </p>
+            <p className="relative mt-2 text-sm font-bold text-brand-gold-light">
+              {formatPrice(product.price)}
+            </p>
           </div>
         </div>
-      </article>
-    </button>
+      </button>
+
+      <button
+        type="button"
+        onClick={handleAddToCart}
+        className="product-add-cart-btn absolute top-3 right-3 z-10 flex size-9 items-center justify-center rounded-full border border-white/80 bg-brand-gold text-brand-charcoal opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:bg-brand-gold-light focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-brand-teal"
+        aria-label={`Add ${product.name} to cart`}
+      >
+        <HiOutlinePlus className="size-5 stroke-[2.5]" />
+      </button>
+    </article>
   )
 }

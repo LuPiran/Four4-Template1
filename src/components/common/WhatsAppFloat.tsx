@@ -3,6 +3,8 @@ import { HiOutlineXMark } from 'react-icons/hi2'
 import { FaWhatsapp } from 'react-icons/fa'
 import { contactInfo } from '../../data/contact'
 import { openWhatsAppChat } from '../../utils/whatsappContact'
+import { validateContactForm } from '../../utils/contactValidation'
+import { useToast } from '../../context/ToastContext'
 import { gradientGold } from '../../styles/colors'
 
 const CLOSE_DURATION_MS = 320
@@ -11,6 +13,7 @@ const inputClass =
   'w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-brand-charcoal outline-none transition-all placeholder:text-brand-charcoal/40 focus:border-brand-sea focus:ring-2 focus:ring-brand-sea/20'
 
 export function WhatsAppFloat() {
+  const { showToast } = useToast()
   const [isOpen, setIsOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
   const [name, setName] = useState('')
@@ -45,6 +48,13 @@ export function WhatsAppFloat() {
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()
+
+    const validationError = validateContactForm({ name, email, phone, message })
+    if (validationError) {
+      showToast(validationError, 'error')
+      return
+    }
+
     openWhatsAppChat({ name, email, phone, message })
     closePanel()
   }
@@ -125,7 +135,7 @@ export function WhatsAppFloat() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="whatsapp-float-form p-5">
+            <form noValidate onSubmit={handleSubmit} className="whatsapp-float-form p-5">
               <div className="space-y-3">
                 <div>
                   <label htmlFor="wa-float-name" className="mb-1 block text-[10px] font-bold tracking-wide text-brand-charcoal/55 uppercase">
@@ -134,7 +144,6 @@ export function WhatsAppFloat() {
                   <input
                     id="wa-float-name"
                     type="text"
-                    required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your name"
@@ -149,8 +158,9 @@ export function WhatsAppFloat() {
                     </label>
                     <input
                       id="wa-float-email"
-                      type="email"
-                      required
+                      type="text"
+                      inputMode="email"
+                      autoComplete="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@email.com"
@@ -178,7 +188,6 @@ export function WhatsAppFloat() {
                   </label>
                   <textarea
                     id="wa-float-message"
-                    required
                     rows={3}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

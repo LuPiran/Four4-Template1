@@ -9,6 +9,8 @@ import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa'
 import { ScrollReveal } from '../common/ScrollReveal'
 import { contactInfo } from '../../data/contact'
 import { openWhatsAppChat } from '../../utils/whatsappContact'
+import { validateContactForm } from '../../utils/contactValidation'
+import { useToast } from '../../context/ToastContext'
 import { gradientGold } from '../../styles/colors'
 
 const inputClass =
@@ -53,6 +55,7 @@ const channels = [
 ]
 
 export function ContactSection() {
+  const { showToast } = useToast()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -60,6 +63,13 @@ export function ContactSection() {
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()
+
+    const validationError = validateContactForm({ name, email, phone, message })
+    if (validationError) {
+      showToast(validationError, 'error')
+      return
+    }
+
     openWhatsAppChat({ name, email, phone, message })
   }
 
@@ -77,6 +87,7 @@ export function ContactSection() {
         <div className="mt-12 grid gap-8 lg:grid-cols-2 lg:gap-10">
           <ScrollReveal animation="fade-right">
             <form
+              noValidate
               onSubmit={handleSubmit}
               className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm md:p-8"
             >
@@ -93,7 +104,6 @@ export function ContactSection() {
                   <input
                     id="contact-name"
                     type="text"
-                    required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your full name"
@@ -108,8 +118,9 @@ export function ContactSection() {
                     </label>
                     <input
                       id="contact-email"
-                      type="email"
-                      required
+                      type="text"
+                      inputMode="email"
+                      autoComplete="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@email.com"
@@ -137,7 +148,6 @@ export function ContactSection() {
                   </label>
                   <textarea
                     id="contact-message"
-                    required
                     rows={4}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

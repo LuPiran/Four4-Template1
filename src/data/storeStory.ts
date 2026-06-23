@@ -26,7 +26,7 @@ export const storeIntro = {
   title: 'Botanical wellness with science, elegance, and purpose',
   paragraphs: [
     'Polisupport was born from the union of botanical research and refined design. Every product is crafted for a moment in your routine — from an energized morning to deep, restorative rest.',
-    'Our store brings together 20+ formulas across six categories, organized into eight color-coded lines that reflect each product benefit. Transparency, traceability, and premium quality in every bottle.',
+    'Our store brings together 20+ formulas across six categories, organized into six color-coded lines that reflect each product benefit. Transparency, traceability, and premium quality in every bottle.',
   ],
   collageImages: [
     {
@@ -68,10 +68,14 @@ export const storePillars: StorePillar[] = [
   },
 ]
 
-export const brandLineShowcase = (Object.keys(brandLines) as BrandLine[]).map((line) => ({
-  line,
-  ...brandLines[line],
-}))
+const EXCLUDED_SHOWCASE_LINES: BrandLine[] = ['balance', 'power']
+
+export const brandLineShowcase = (Object.keys(brandLines) as BrandLine[])
+  .filter((line) => !EXCLUDED_SHOWCASE_LINES.includes(line))
+  .map((line) => ({
+    line,
+    ...brandLines[line],
+  }))
 
 export const productCategories: ProductCategoryShowcase[] = [
   {

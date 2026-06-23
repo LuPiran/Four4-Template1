@@ -87,7 +87,7 @@ export function AboutStoreSection() {
           <ScrollReveal className="text-center">
             <p className="text-xs font-bold tracking-widest text-brand-gold uppercase">Our lines</p>
             <h3 className="mt-2 text-xl font-semibold text-brand-teal md:text-3xl">
-              Eight colors, eight purposes
+              Six colors, six purposes
             </h3>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-brand-charcoal/60">
               Each Polisupport line has a visual identity and a clear benefit — choose the color that
@@ -95,7 +95,7 @@ export function AboutStoreSection() {
             </p>
           </ScrollReveal>
 
-          <div className="mt-10 grid grid-cols-2 items-stretch gap-3 md:grid-cols-4 xl:grid-cols-8">
+          <div className="mt-10 grid grid-cols-2 items-stretch gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {brandLineShowcase.map((line, index) => (
               <ScrollReveal key={line.line} delay={index * 60} animation="scale" className="h-full">
                 <div className="brand-line-card group flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">

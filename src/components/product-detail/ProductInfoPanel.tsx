@@ -1,4 +1,4 @@
-import { HiOutlineArrowRight } from 'react-icons/hi2'
+import { HiOutlineArrowRight, HiOutlineShoppingBag } from 'react-icons/hi2'
 import { FaWhatsapp } from 'react-icons/fa'
 import { ScrollReveal } from '../common/ScrollReveal'
 import { ProductCard } from '../products/ProductCard'
@@ -7,7 +7,10 @@ import { categoryLabels, getProductDetailContent } from '../../data/productDetai
 import { getBrandLine } from '../../data/productBrand'
 import { contactInfo } from '../../data/contact'
 import { useProductModal } from '../../context/ProductModalContext'
+import { useCart } from '../../context/CartContext'
+import { useToast } from '../../context/ToastContext'
 import { gradientGold } from '../../styles/colors'
+import { formatPrice } from '../../utils/formatPrice'
 
 type ProductInfoPanelProps = {
   product: ShowcaseProduct
@@ -15,12 +18,19 @@ type ProductInfoPanelProps = {
 
 export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
   const { closeProduct } = useProductModal()
+  const { addToCart } = useCart()
+  const { showToast } = useToast()
   const detail = getProductDetailContent(product)
   const brand = getBrandLine(product.brandLine)
 
   const whatsappText = encodeURIComponent(
     `Hi! I'm interested in the product: ${product.name}`,
   )
+
+  function handleAddToCart() {
+    addToCart(product)
+    showToast('Product added to cart', 'success')
+  }
 
   return (
     <div className="animate-fade-in-up space-y-6" style={{ animationDelay: '0.15s', animationFillMode: 'both' }}>
@@ -37,6 +47,9 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
           </p>
         </div>
         <h1 className="mt-2 text-2xl font-semibold text-brand-teal md:text-4xl">{product.name}</h1>
+        <p className="mt-2 text-2xl font-bold text-brand-gold-dark md:text-3xl">
+          {formatPrice(product.price)}
+        </p>
         <p className="mt-3 text-base leading-relaxed text-brand-charcoal/65">{detail.tagline}</p>
       </div>
 
@@ -52,6 +65,14 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
       </ul>
 
       <div className="flex flex-wrap gap-3 pt-2">
+        <button
+          type="button"
+          onClick={handleAddToCart}
+          className="group inline-flex items-center gap-2 rounded-full border border-brand-teal/25 bg-brand-teal px-7 py-3.5 text-sm font-semibold text-white transition-all hover:scale-105 hover:bg-brand-sea hover:shadow-xl"
+        >
+          <HiOutlineShoppingBag className="size-5" />
+          Add to cart
+        </button>
         <a
           href={`https://wa.me/${contactInfo.whatsapp}?text=${whatsappText}`}
           target="_blank"

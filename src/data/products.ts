@@ -6,6 +6,7 @@ import type { PathologyId } from './pathologies'
 export type ShowcaseProduct = {
   id: string
   name: string
+  price: number
   image: string
   imageHover: string
   brandLine: BrandLine
@@ -18,15 +19,13 @@ export type ShowcaseProduct = {
   images?: string[]
 }
 
-/** @deprecated use product.brandLine + getProductColor */
-export function productColor(product: ShowcaseProduct): string {
-  return getProductColor(product.brandLine)
-}
+const EXCLUDED_BRAND_LINES: BrandLine[] = ['balance', 'power']
 
-export const showcaseProducts: ShowcaseProduct[] = [
+const catalogProducts: ShowcaseProduct[] = [
   {
     id: '1',
     name: 'Full Spectrum Oil 1000mg',
+    price: 89,
     brandLine: 'max',
     pathologies: ['sleep', 'anxiety', 'stress'],
     category: 'oil',
@@ -52,6 +51,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '2',
     name: 'Sleep Support Capsules 750mg',
+    price: 49,
     brandLine: 'rest',
     pathologies: ['sleep', 'stress'],
     category: 'caplets',
@@ -61,6 +61,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '3',
     name: 'Relax Tropical Gummies 750mg',
+    price: 44,
     brandLine: 'harmony',
     pathologies: ['anxiety', 'stress'],
     category: 'gummies',
@@ -70,6 +71,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '4',
     name: 'Recovery Topical Balm 500mg',
+    price: 39,
     brandLine: 'active',
     pathologies: ['pain', 'recovery', 'skin'],
     category: 'topicals',
@@ -79,6 +81,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '5',
     name: 'Wellness Shot Drink 300mg',
+    price: 28,
     brandLine: 'active',
     pathologies: ['energy', 'focus'],
     category: 'drinks',
@@ -88,6 +91,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '6',
     name: 'Calm Mint Pod Vape 800mg',
+    price: 54,
     brandLine: 'harmony',
     pathologies: ['anxiety', 'stress'],
     category: 'pod-vape',
@@ -95,17 +99,9 @@ export const showcaseProducts: ShowcaseProduct[] = [
     imageHover: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=500&h=500&fit=crop',
   },
   {
-    id: '7',
-    name: 'Broad Spectrum Oil 500mg',
-    brandLine: 'balance',
-    pathologies: ['sleep', 'pain'],
-    category: 'oil',
-    image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=500&h=500&fit=crop',
-    imageHover: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&h=500&fit=crop',
-  },
-  {
     id: '8',
     name: 'Daily Vitality Capsules 600mg',
+    price: 47,
     brandLine: 'daily',
     pathologies: ['energy', 'focus'],
     category: 'caplets',
@@ -115,6 +111,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '9',
     name: 'Focus Berry Gummies 500mg',
+    price: 42,
     brandLine: 'harmony',
     pathologies: ['focus', 'energy'],
     category: 'gummies',
@@ -124,6 +121,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '10',
     name: 'Hydration Premium Cream 400mg',
+    price: 36,
     brandLine: 'pure',
     pathologies: ['skin', 'recovery'],
     category: 'topicals',
@@ -133,6 +131,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '11',
     name: 'Zero THC Isolate Oil 300mg',
+    price: 59,
     brandLine: 'pure',
     pathologies: ['anxiety'],
     category: 'oil',
@@ -142,6 +141,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '12',
     name: 'Calm Day Capsules 450mg',
+    price: 45,
     brandLine: 'harmony',
     pathologies: ['stress', 'anxiety'],
     category: 'caplets',
@@ -151,6 +151,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '13',
     name: 'Night Melaton Gummies 600mg',
+    price: 46,
     brandLine: 'rest',
     pathologies: ['sleep'],
     category: 'gummies',
@@ -160,6 +161,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '14',
     name: 'Muscle Relief Spray 350mg',
+    price: 34,
     brandLine: 'active',
     pathologies: ['pain', 'recovery'],
     category: 'topicals',
@@ -169,6 +171,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '15',
     name: 'Detox Green Drink 250mg',
+    price: 26,
     brandLine: 'daily',
     pathologies: ['energy'],
     category: 'drinks',
@@ -178,6 +181,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '16',
     name: 'Focus Citrus Pod Vape 650mg',
+    price: 52,
     brandLine: 'harmony',
     pathologies: ['focus', 'energy'],
     category: 'pod-vape',
@@ -187,6 +191,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '17',
     name: 'Night Drops Oil 900mg',
+    price: 84,
     brandLine: 'max',
     pathologies: ['sleep', 'stress'],
     category: 'oil',
@@ -194,17 +199,9 @@ export const showcaseProducts: ShowcaseProduct[] = [
     imageHover: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&h=500&fit=crop',
   },
   {
-    id: '18',
-    name: 'Joint Support Capsules 550mg',
-    brandLine: 'balance',
-    pathologies: ['pain', 'recovery'],
-    category: 'caplets',
-    image: 'https://images.unsplash.com/photo-1550572017-edd226fa7858?w=500&h=500&fit=crop',
-    imageHover: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&h=500&fit=crop',
-  },
-  {
     id: '19',
     name: 'Immune Boost Gummies 400mg',
+    price: 40,
     brandLine: 'daily',
     pathologies: ['energy'],
     category: 'gummies',
@@ -214,6 +211,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '20',
     name: 'Relax Tea Drink 200mg',
+    price: 24,
     brandLine: 'rest',
     pathologies: ['stress', 'sleep'],
     category: 'drinks',
@@ -223,6 +221,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '21',
     name: 'Sleep Lavender Pod Vape 700mg',
+    price: 53,
     brandLine: 'rest',
     pathologies: ['sleep'],
     category: 'pod-vape',
@@ -232,6 +231,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
   {
     id: '22',
     name: 'Facial Glow Serum 300mg',
+    price: 38,
     brandLine: 'pure',
     pathologies: ['skin'],
     category: 'topicals',
@@ -239,6 +239,15 @@ export const showcaseProducts: ShowcaseProduct[] = [
     imageHover: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=500&fit=crop',
   },
 ]
+
+export const showcaseProducts = catalogProducts.filter(
+  (product) => !EXCLUDED_BRAND_LINES.includes(product.brandLine),
+)
+
+/** @deprecated use product.brandLine + getProductColor */
+export function productColor(product: ShowcaseProduct): string {
+  return getProductColor(product.brandLine)
+}
 
 export function getProductById(id: string): ShowcaseProduct | undefined {
   return showcaseProducts.find((product) => product.id === id)

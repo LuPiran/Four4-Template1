@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { HiOutlineBars3 } from 'react-icons/hi2'
 import { BrandLogo } from '../common/BrandLogo'
+import { CartButton } from '../cart/CartButton'
 import { NavSidebar } from './NavSidebar'
 import { useScrolled } from '../../hooks/useScrolled'
 import { siteNavLinks } from '../../data/navigation'
@@ -92,10 +93,11 @@ export function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden shrink-0 items-center xl:flex">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <CartButton />
             <a
               href="/#contact"
-              className="rounded-full border border-brand-teal/20 px-4 py-2 text-xs font-semibold text-brand-teal transition-all hover:border-brand-sea hover:bg-brand-cream"
+              className="hidden rounded-full border border-brand-teal/20 px-4 py-2 text-xs font-semibold text-brand-teal transition-all hover:border-brand-sea hover:bg-brand-cream xl:inline-flex"
             >
               Contact us
             </a>

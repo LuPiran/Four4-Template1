@@ -9,7 +9,10 @@ import { StatsSection } from '../components/sections/StatsSection'
 import { TestimonialsSection } from '../components/sections/TestimonialsSection'
 import { TrustBadges } from '../components/sections/TrustBadges'
 import { ProductModalProvider } from '../context/ProductModalContext'
+import { CartProvider } from '../context/CartContext'
+import { ToastProvider } from '../context/ToastContext'
 import { ProductModal } from '../components/products/ProductModal'
+import { CartDrawer } from '../components/cart/CartDrawer'
 import { WhatsAppFloat } from '../components/common/WhatsAppFloat'
 
 export function HomePage() {
@@ -30,15 +33,20 @@ export function HomePage() {
 export function HomeLayout() {
   return (
     <ProductModalProvider>
-      <div className="min-h-screen overflow-x-clip bg-white font-sans text-brand-charcoal">
-        <Navbar />
-        <main>
-          <HomePage />
-        </main>
-        <Footer />
-        <ProductModal />
-        <WhatsAppFloat />
-      </div>
+      <CartProvider>
+        <ToastProvider>
+          <div className="min-h-screen overflow-x-clip bg-white font-sans text-brand-charcoal">
+            <Navbar />
+            <main>
+              <HomePage />
+            </main>
+            <Footer />
+            <ProductModal />
+            <CartDrawer />
+            <WhatsAppFloat />
+          </div>
+        </ToastProvider>
+      </CartProvider>
     </ProductModalProvider>
   )
 }
