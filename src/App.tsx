@@ -1,19 +1,35 @@
-import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom'
-import { HomeLayout } from './pages/HomePage'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { SiteLayout } from './layouts/SiteLayout'
+import { HomePage } from './pages/HomePage'
+import { ShopPage } from './pages/ShopPage'
+import { BlogPage } from './pages/BlogPage'
+import { BlogArticlePage } from './pages/BlogArticlePage'
+import { FaqPage } from './pages/FaqPage'
+import { AboutPage } from './pages/AboutPage'
+import { ContactPage } from './pages/ContactPage'
+import { PolicyPage } from './pages/PolicyPage'
 
-function ProductRedirect() {
+function LegacyProductRedirect() {
   const { productId } = useParams<{ productId: string }>()
-  if (!productId) return <Navigate to="/" replace />
-  return <Navigate to={`/?product=${productId}`} replace />
+  return <Navigate to={productId ? `/shop/${productId}` : '/shop'} replace />
 }
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomeLayout />} />
-        <Route path="/produtos/:productId" element={<ProductRedirect />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route element={<SiteLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/shop" element={<ShopPage />} />
+        <Route path="/shop/:productId" element={<ShopPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:slug" element={<BlogArticlePage />} />
+        <Route path="/faq" element={<FaqPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/policies/:slug" element={<PolicyPage />} />
+        <Route path="/wellness" element={<Navigate to="/shop" replace />} />
+      </Route>
+      <Route path="/produtos/:productId" element={<LegacyProductRedirect />} />
+    </Routes>
   )
 }

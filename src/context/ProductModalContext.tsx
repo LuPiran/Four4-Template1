@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getProductById } from '../data/products'
 
 type ProductModalContextValue = {
@@ -24,13 +24,16 @@ const ProductModalContext = createContext<ProductModalContextValue | null>(null)
 const CLOSE_DURATION_MS = 340
 
 export function ProductModalProvider({ children }: { children: ReactNode }) {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const productId = searchParams.get('product')
+  const { productId: routeProductId } = useParams()
+  const location = useLocation()
+  const navigate = useNavigate()
   const [isClosing, setIsClosing] = useState(false)
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const isValidProduct = productId ? Boolean(getProductById(productId)) : false
-  const isOpen = isValidProduct && !isClosing
+  const productId =
+    routeProductId && getProductById(routeProductId) ? routeProductId : null
+
+  const isOpen = Boolean(productId) && !isClosing
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
@@ -44,26 +47,28 @@ export function ProductModalProvider({ children }: { children: ReactNode }) {
       if (!getProductById(id)) return
       clearCloseTimer()
       setIsClosing(false)
-      setSearchParams({ product: id }, { replace: false })
+      navigate(`/shop/${id}`)
     },
-    [clearCloseTimer, setSearchParams],
+    [clearCloseTimer, navigate],
   )
 
   const closeProduct = useCallback(() => {
     if (!productId || isClosing) return
     setIsClosing(true)
     closeTimerRef.current = setTimeout(() => {
-      setSearchParams({}, { replace: true })
+      if (location.pathname.startsWith('/shop/')) {
+        navigate('/shop', { replace: true })
+      }
       setIsClosing(false)
       closeTimerRef.current = null
     }, CLOSE_DURATION_MS)
-  }, [isClosing, productId, setSearchParams])
+  }, [isClosing, location.pathname, navigate, productId])
 
   useEffect(() => {
-    if (productId && !getProductById(productId)) {
-      setSearchParams({}, { replace: true })
+    if (routeProductId && !getProductById(routeProductId)) {
+      navigate('/shop', { replace: true })
     }
-  }, [productId, setSearchParams])
+  }, [navigate, routeProductId])
 
   useEffect(() => {
     return () => clearCloseTimer()
@@ -71,13 +76,13 @@ export function ProductModalProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(
     () => ({
-      productId: isValidProduct ? productId : null,
+      productId,
       isOpen,
       isClosing,
       openProduct,
       closeProduct,
     }),
-    [closeProduct, isClosing, isOpen, isValidProduct, openProduct, productId],
+    [closeProduct, isClosing, isOpen, openProduct, productId],
   )
 
   return <ProductModalContext.Provider value={value}>{children}</ProductModalContext.Provider>

@@ -11,7 +11,27 @@
   --color-brand-gold-dark: #c59135;
   --color-brand-sidebar: #003836;
 
-  --font-sans: "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Geologica", system-ui, sans-serif;
+  --font-display: "Barlow Condensed", "Geologica", system-ui, sans-serif;
+
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.25rem;
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.5rem;
+  --text-base: 1.125rem;
+  --text-base--line-height: 1.75rem;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.875rem;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.875rem;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 2.125rem;
+  --text-3xl: 2.125rem;
+  --text-3xl--line-height: 2.375rem;
+  --text-4xl: 2.625rem;
+  --text-4xl--line-height: 2.875rem;
+  --text-5xl: 3.5rem;
+  --text-5xl--line-height: 1.1;
 }
 
 html {
@@ -27,7 +47,68 @@ body,
 
 body {
   font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 400;
   background: #ffffff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+}
+
+.section-kicker {
+  display: inline-block;
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, #f0d48a 0%, #c5a059 100%);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-display);
+  letter-spacing: 0.18em;
+  color: var(--color-brand-charcoal);
+  text-transform: uppercase;
+}
+
+.section-title {
+  margin-top: 0.75rem;
+  font-size: clamp(1.75rem, 3.5vw, 2.625rem);
+  font-weight: 600;
+  font-family: var(--font-display);
+  color: var(--color-brand-charcoal);
+}
+
+.mega-menu-panel {
+  animation: mega-menu-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.mega-menu-link:hover {
+  padding-left: 0.25rem;
+}
+
+.wellness-mega-card {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    background-color 0.35s ease;
+}
+
+@keyframes mega-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slide-down {
@@ -251,6 +332,149 @@ body {
   animation: aurora 12s ease-in-out infinite;
 }
 
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes page-enter-soft {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.page-transition-enter {
+  animation: page-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: opacity, transform;
+}
+
+.page-content-enter > * {
+  animation: page-enter-soft 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.page-content-enter > *:nth-child(1) {
+  animation-delay: 0.04s;
+}
+
+.page-content-enter > *:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.page-content-enter > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.page-content-enter > *:nth-child(4) {
+  animation-delay: 0.16s;
+}
+
+.page-content-enter > *:nth-child(5) {
+  animation-delay: 0.2s;
+}
+
+.page-content-enter > *:nth-child(6) {
+  animation-delay: 0.24s;
+}
+
+.faq-item {
+  border-bottom: 1px solid rgb(0 75 73 / 0.1);
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-chevron {
+  transform: rotate(0deg);
+}
+
+.faq-chevron--open {
+  transform: rotate(180deg);
+}
+
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-panel--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.faq-panel--closed {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.faq-panel__inner {
+  overflow: hidden;
+}
+
+.faq-panel__content {
+  transform: translateY(-8px);
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-panel--open .faq-panel__content {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition-enter,
+  .page-content-enter > * {
+    animation: none !important;
+  }
+
+  .faq-panel,
+  .faq-panel__content,
+  .faq-chevron {
+    transition: none !important;
+  }
+
+  .faq-panel--closed {
+    display: none;
+  }
+
+  .faq-panel--open {
+    opacity: 1;
+    grid-template-rows: 1fr;
+  }
+
+  .faq-panel__content {
+    transform: none;
+  }
+
+  .scroll-reveal-up,
+  .scroll-reveal-down,
+  .scroll-reveal-left,
+  .scroll-reveal-right,
+  .scroll-reveal-scale,
+  .scroll-reveal-blur {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
 .scroll-reveal-up,
 .scroll-reveal-down,
 .scroll-reveal-left,
@@ -289,25 +513,6 @@ body {
 .scroll-reveal-scale.is-visible {
   opacity: 1;
   transform: translate(0) scale(1);
-}
-
-.section-kicker {
-  display: inline-block;
-  border-radius: 0.5rem;
-  background: linear-gradient(90deg, #f0d48a 0%, #c5a059 100%);
-  padding: 0.25rem 0.75rem;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--color-brand-charcoal);
-  text-transform: uppercase;
-}
-
-.section-title {
-  margin-top: 0.75rem;
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  font-weight: 700;
-  color: var(--color-brand-charcoal);
 }
 
 .scroll-reveal-blur {
@@ -444,64 +649,82 @@ body {
   background-size: 48px 48px;
 }
 
-.hero-banner-bg {
-  background-color: var(--color-brand-teal);
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(
-      135deg,
-      var(--color-brand-teal) 0%,
-      var(--color-brand-sea) 48%,
-      var(--color-brand-teal) 100%
-    );
-  background-size: 48px 48px, 48px 48px, 100% 100%;
+.hero-banner-slide {
+  overflow: hidden;
+}
+
+.hero-banner-photo {
+  will-change: transform;
+}
+
+@keyframes hero-banner-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-banner-follow-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-banner-copy-active .hero-banner-title {
+  animation: hero-banner-title-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-banner-copy-active .hero-banner-kicker {
+  animation: hero-banner-follow-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
+}
+
+.hero-banner-copy-active .hero-banner-subtitle {
+  animation: hero-banner-follow-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.68s forwards;
+}
+
+.hero-banner-copy-active .hero-banner-cta {
+  animation: hero-banner-follow-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.82s forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-banner-copy-active .hero-banner-title,
+  .hero-banner-copy-active .hero-banner-kicker,
+  .hero-banner-copy-active .hero-banner-subtitle,
+  .hero-banner-copy-active .hero-banner-cta {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .hero-carousel-stage {
-  min-height: 34rem;
-}
-
-.hero-carousel-content {
-  min-height: inherit;
-}
-
-@media (min-width: 640px) {
-  .hero-carousel-stage {
-    min-height: 30rem;
-  }
+  min-height: 26rem;
 }
 
 @media (min-width: 768px) {
   .hero-carousel-stage {
-    min-height: 22rem;
+    min-height: 32rem;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-carousel-stage {
-    min-height: 37.5rem;
+    min-height: 36rem;
   }
 }
 
 @media (max-width: 767px) {
-  .hero-carousel-visual {
-    margin-inline: auto;
-    max-width: 11rem;
-  }
-
   .hero-carousel-copy h2 {
     word-break: break-word;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .hero-carousel-stage {
-    min-height: 26rem;
-  }
-
-  .hero-carousel-visual {
-    justify-self: end;
   }
 }
 
@@ -981,7 +1204,7 @@ body {
 
 .polisupport-toast .Toastify__toast-body {
   padding: 0;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.5;
 }
 

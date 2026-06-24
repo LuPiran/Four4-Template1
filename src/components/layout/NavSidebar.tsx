@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { HiOutlineXMark } from 'react-icons/hi2'
 import { BrandLogo } from '../common/BrandLogo'
-import { siteNavLinks } from '../../data/navigation'
+import { navItems } from '../../data/navigation'
 import { gradientGold } from '../../styles/colors'
+import { MobileNavItem, type MegaMenuId } from './DesktopNav'
 
 type NavSidebarProps = {
   isOpen: boolean
@@ -14,13 +15,12 @@ type NavSidebarProps = {
 export function NavSidebar({ isOpen, isClosing, onClose }: NavSidebarProps) {
   const panelRef = useRef<HTMLElement>(null)
   const animationState = isClosing ? 'closing' : 'open'
+  const [expanded, setExpanded] = useState<MegaMenuId | null>(null)
 
   useEffect(() => {
     if (!isOpen && !isClosing) return
-
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-
     return () => {
       document.body.style.overflow = previousOverflow
     }
@@ -28,22 +28,23 @@ export function NavSidebar({ isOpen, isClosing, onClose }: NavSidebarProps) {
 
   useEffect(() => {
     if (!isOpen) return
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
     }
-
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
 
   useEffect(() => {
-    if (isOpen && panelRef.current) {
-      panelRef.current.focus()
-    }
+    if (isOpen && panelRef.current) panelRef.current.focus()
+    if (!isOpen) setExpanded(null)
   }, [isOpen])
 
   if (!isOpen && !isClosing) return null
+
+  const toggleExpanded = (id: MegaMenuId) => {
+    setExpanded((current) => (current === id ? null : id))
+  }
 
   return (
     <div className="nav-sidebar-root fixed inset-0 z-[120]" role="presentation">
@@ -66,9 +67,9 @@ export function NavSidebar({ isOpen, isClosing, onClose }: NavSidebarProps) {
           animationState === 'closing' ? 'nav-sidebar-panel-out' : 'nav-sidebar-panel-in'
         }`}
       >
-        <div className="nav-sidebar-header flex items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
+        <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
           <Link to="/" onClick={onClose} className="shrink-0">
-            <BrandLogo size="sm" />
+            <BrandLogo size="sm" variant="footer" />
           </Link>
           <button
             type="button"
@@ -81,33 +82,35 @@ export function NavSidebar({ isOpen, isClosing, onClose }: NavSidebarProps) {
         </div>
 
         <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-6">
-          <p className="mb-3 px-2 text-[10px] font-bold tracking-widest text-brand-gold uppercase">
-            Menu
-          </p>
-          {siteNavLinks.map((link, index) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={onClose}
-              className={`nav-sidebar-link rounded-xl px-3 py-3 text-sm font-semibold text-white/85 transition-colors hover:bg-white/10 hover:text-white ${
-                animationState === 'open' ? 'nav-sidebar-link-in' : ''
-              }`}
-              style={{ animationDelay: `${80 + index * 55}ms` }}
-            >
-              {link.label}
-            </a>
+          {navItems.map((item, index) => (
+            <MobileNavItem
+              key={item.type === 'link' ? item.to : item.type}
+              item={item}
+              expanded={expanded}
+              onToggle={toggleExpanded}
+              onClose={onClose}
+              linkClassName={(isActive) =>
+                `rounded-xl px-3 py-3 text-sm font-semibold transition-colors ${
+                  isActive ? 'bg-white/15 text-white' : 'text-white/85 hover:bg-white/10 hover:text-white'
+                } ${animationState === 'open' ? 'nav-sidebar-link-in' : ''}`
+              }
+              subLinkClassName="block rounded-lg px-2 py-1.5 text-xs text-white/75 transition-colors hover:bg-white/10 hover:text-white"
+              sectionTitleClassName="text-[10px] font-bold tracking-[0.16em] text-white/50 uppercase"
+              animationClass={animationState === 'open' ? 'nav-sidebar-link-in' : ''}
+              animationDelay={80 + index * 55}
+            />
           ))}
         </nav>
 
         <div className="border-t border-white/10 p-5">
-          <a
-            href="/#contact"
+          <Link
+            to="/shop"
             onClick={onClose}
-            className="nav-sidebar-cta flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold text-brand-charcoal transition-transform hover:scale-[1.02]"
+            className="flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold text-brand-charcoal transition-transform hover:scale-[1.02]"
             style={{ background: gradientGold }}
           >
-            Contact us
-          </a>
+            Shop now
+          </Link>
         </div>
       </aside>
     </div>

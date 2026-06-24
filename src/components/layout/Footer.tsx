@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {
   HiOutlineClock,
   HiOutlineEnvelope,
@@ -11,7 +12,7 @@ import {
   FaYoutube,
 } from 'react-icons/fa'
 import { BrandLogo } from '../common/BrandLogo'
-import { siteNavLinks } from '../../data/navigation'
+import { footerHelpLinks, footerNavLinks, footerPolicyLinks } from '../../data/navigation'
 import { contactInfo, socialLinks } from '../../data/contact'
 
 const socialIcons = {
@@ -62,9 +63,9 @@ export function Footer() {
   return (
     <footer className="bg-brand-teal text-white">
       <div className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
-          <div className="lg:col-span-1">
-            <BrandLogo size="lg" />
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <BrandLogo size="lg" variant="footer" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
               Premium Wellness — high-quality botanical products for balance, well-being, and a
               healthier life.
@@ -74,17 +75,43 @@ export function Footer() {
           <div>
             <h3 className="text-xs font-bold tracking-widest text-brand-gold uppercase">Navigation</h3>
             <ul className="mt-4 space-y-2.5">
-              {siteNavLinks.map((item) => (
-                <li key={item.href}>
-                  <a href={item.href} className="text-sm text-white/70 transition-colors hover:text-white">
+              {footerNavLinks.map((item) => (
+                <li key={item.to}>
+                  <Link to={item.to} className="text-sm text-white/70 transition-colors hover:text-white">
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
+            <h3 className="text-xs font-bold tracking-widest text-brand-gold uppercase">Help</h3>
+            <ul className="mt-4 space-y-2.5">
+              {footerHelpLinks.map((item) => (
+                <li key={item.to}>
+                  <Link to={item.to} className="text-sm text-white/70 transition-colors hover:text-white">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-bold tracking-widest text-brand-gold uppercase">Policies</h3>
+            <ul className="mt-4 space-y-2.5">
+              {footerPolicyLinks.map((item) => (
+                <li key={item.to}>
+                  <Link to={item.to} className="text-sm text-white/70 transition-colors hover:text-white">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="sm:col-span-2 lg:col-span-1">
             <h3 className="text-xs font-bold tracking-widest text-brand-gold uppercase">Contact</h3>
             <ul className="mt-4 space-y-4">
               {contactRows.map((row) => {

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useProductModal } from '../../context/ProductModalContext'
 import { ScrollReveal } from '../common/ScrollReveal'
 import {
@@ -7,16 +8,22 @@ import {
   pathologies,
   type PathologyId,
 } from '../../data/pathologies'
+import { buildShopUrl } from '../../utils/shopFilters'
 
-export function PathologiesSection() {
+type PathologiesSectionProps = {
+  compact?: boolean
+}
+
+export function PathologiesSection({ compact = false }: PathologiesSectionProps) {
   const { openProduct } = useProductModal()
   const [activeId, setActiveId] = useState<PathologyId>('sleep')
   const activePathology = pathologies.find((item) => item.id === activeId) ?? pathologies[0]
   const relatedProducts = getProductsByPathology(activeId)
   const ActiveIcon = activePathology.icon
+  const sectionPy = compact ? 'py-12 md:py-16' : 'py-20'
 
   return (
-    <section id="wellness" className="relative overflow-hidden bg-white py-20">
+    <section id="wellness" className={`relative overflow-hidden bg-white ${sectionPy}`}>
       <div
         className="animate-aurora pointer-events-none absolute -left-32 top-1/4 size-80 rounded-full bg-brand-sea/10 blur-3xl"
         aria-hidden="true"
@@ -24,17 +31,17 @@ export function PathologiesSection() {
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold tracking-widest text-brand-gold uppercase">Wellness goals</p>
-          <h2 className="mt-2 text-2xl font-semibold text-brand-teal md:text-4xl">
-            The right product for every need
+          <p className="font-display text-xs font-semibold tracking-[0.2em] text-brand-gold uppercase">Wellness goals</p>
+          <h2 className="font-display mt-2 text-2xl font-semibold text-brand-teal md:text-4xl">
+            How we support your well-being
           </h2>
-          <p className="mt-3 text-sm text-brand-charcoal/60 md:text-base">
+          <p className="mt-3 text-sm font-light text-brand-charcoal/60 md:text-base">
             Our catalog is organized by wellness goals. Explore the conditions our products support
             and find the ideal formula for your routine.
           </p>
         </ScrollReveal>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
+        <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
           <ScrollReveal animation="fade-right">
             <div className="grid gap-2 md:grid-cols-1">
               {pathologies.map((pathology) => {
@@ -85,7 +92,6 @@ export function PathologiesSection() {
             </div>
           </ScrollReveal>
 
-          {/* Painel detalhado */}
           <ScrollReveal animation="fade-left" delay={100}>
             <div className="pathology-panel overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg">
               <div className="relative aspect-[16/9] overflow-hidden">
@@ -102,7 +108,7 @@ export function PathologiesSection() {
                       <ActiveIcon className="size-6" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-white">{activePathology.name}</h3>
+                      <h3 className="font-display text-lg font-semibold text-white">{activePathology.name}</h3>
                       <p className="text-xs text-white/75">
                         {relatedProducts.length} product{relatedProducts.length !== 1 ? 's' : ''} in catalog
                       </p>
@@ -112,10 +118,10 @@ export function PathologiesSection() {
               </div>
 
               <div className="p-6">
-                <p className="text-sm leading-relaxed text-brand-charcoal/70">{activePathology.longDescription}</p>
+                <p className="text-sm font-light leading-relaxed text-brand-charcoal/70">{activePathology.longDescription}</p>
 
                 <div className="mt-6">
-                  <p className="text-xs font-bold tracking-widest text-brand-gold uppercase">
+                  <p className="font-display text-xs font-semibold tracking-[0.2em] text-brand-gold uppercase">
                     Recommended products
                   </p>
                   <ul className="mt-3 space-y-2">
@@ -141,22 +147,22 @@ export function PathologiesSection() {
                       </li>
                     ))}
                   </ul>
-                  {relatedProducts.length > 5 && (
-                    <a
-                      href="#products"
+                  {relatedProducts.length > 0 && (
+                    <Link
+                      to={buildShopUrl({ wellness: activeId })}
                       className="mt-3 inline-block text-xs font-semibold text-brand-teal hover:text-brand-sea"
                     >
-                      View all {relatedProducts.length} products →
-                    </a>
+                      View all {relatedProducts.length} product{relatedProducts.length !== 1 ? 's' : ''} →
+                    </Link>
                   )}
                 </div>
 
-                <a
-                  href="#contact"
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-brand-teal/20 py-2.5 text-xs font-semibold text-brand-teal transition-all hover:border-brand-sea hover:bg-brand-cream/50 sm:w-auto sm:px-6"
+                <Link
+                  to={buildShopUrl({ wellness: activeId })}
+                  className="font-display mt-6 inline-flex w-full items-center justify-center rounded-full border border-brand-teal/20 py-2.5 text-xs font-semibold text-brand-teal transition-all hover:border-brand-sea hover:bg-brand-cream/50 sm:w-auto sm:px-6"
                 >
-                  Ask a specialist about {activePathology.name.toLowerCase()}
-                </a>
+                  Shop {activePathology.name.toLowerCase()}
+                </Link>
               </div>
             </div>
           </ScrollReveal>

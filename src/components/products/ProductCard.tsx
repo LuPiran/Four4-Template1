@@ -9,14 +9,16 @@ import { formatPrice } from '../../utils/formatPrice'
 
 type ProductCardProps = {
   product: ShowcaseProduct
+  variant?: 'grid' | 'carousel'
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, variant = 'carousel' }: ProductCardProps) {
   const { openProduct } = useProductModal()
   const { addToCart } = useCart()
   const { showToast } = useToast()
   const brand = getBrandLine(product.brandLine)
   const isDarkBand = product.brandLine === 'power' || product.brandLine === 'max'
+  const isGrid = variant === 'grid'
 
   function handleAddToCart(event: MouseEvent<HTMLButtonElement>) {
     event.stopPropagation()
@@ -26,26 +28,42 @@ export function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <article className="product-carousel-card group relative w-[210px] shrink-0 sm:w-[240px] md:w-[260px]">
+    <article
+      className={`group relative ${isGrid ? 'w-full' : 'product-carousel-card w-[210px] shrink-0 sm:w-[240px] md:w-[260px]'}`}
+    >
       <button
         type="button"
         onClick={() => openProduct(product.id)}
         className="block w-full cursor-pointer text-left"
       >
-        <div className="product-label-card overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.18)]">
+        <div
+          className={`product-label-card overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-500 ${
+            isGrid ? 'hover:-translate-y-1 hover:shadow-lg' : 'group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.18)]'
+          }`}
+        >
           <div className="relative bg-white px-4 pt-5 pb-3">
-            <div className="relative mx-auto aspect-square w-full max-w-[180px] overflow-hidden rounded-xl bg-brand-cream/20 transition-transform duration-700 group-hover:scale-[1.03]">
+            <div
+              className={`relative mx-auto aspect-square w-full overflow-hidden rounded-xl bg-brand-cream/20 ${
+                isGrid ? '' : 'max-w-[180px] transition-transform duration-700 group-hover:scale-[1.03]'
+              }`}
+            >
               <img
                 src={product.image}
                 alt={product.name}
-                className="product-image-primary absolute inset-0 size-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:opacity-0"
+                className={`size-full object-contain p-2 ${
+                  isGrid
+                    ? 'transition-transform duration-500 group-hover:scale-105'
+                    : 'product-image-primary absolute inset-0 object-cover transition-all duration-700 group-hover:scale-110 group-hover:opacity-0'
+                }`}
                 loading="lazy"
               />
-              <img
-                src={product.imageHover}
-                alt=""
-                className="product-image-secondary absolute inset-0 size-full object-cover opacity-0 transition-all duration-700 group-hover:scale-100 group-hover:opacity-100"
-              />
+              {!isGrid && (
+                <img
+                  src={product.imageHover}
+                  alt=""
+                  className="product-image-secondary absolute inset-0 size-full object-cover opacity-0 transition-all duration-700 group-hover:scale-100 group-hover:opacity-100"
+                />
+              )}
             </div>
           </div>
 

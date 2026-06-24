@@ -5,7 +5,7 @@ import { BrandLogo } from '../common/BrandLogo'
 import { CartButton } from '../cart/CartButton'
 import { NavSidebar } from './NavSidebar'
 import { useScrolled } from '../../hooks/useScrolled'
-import { siteNavLinks } from '../../data/navigation'
+import { DesktopNav, MegaMenuPanel, useMegaMenu } from './DesktopNav'
 
 const SIDEBAR_CLOSE_MS = 320
 
@@ -14,6 +14,8 @@ export function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarClosing, setSidebarClosing] = useState(false)
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const { activeMenu, closeMenu, setActiveMenu } = useMegaMenu()
+  const headerRef = useRef<HTMLElement>(null)
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
@@ -26,7 +28,8 @@ export function Navbar() {
     clearCloseTimer()
     setSidebarClosing(false)
     setSidebarOpen(true)
-  }, [clearCloseTimer])
+    closeMenu()
+  }, [clearCloseTimer, closeMenu])
 
   const closeSidebar = useCallback(() => {
     if (!sidebarOpen || sidebarClosing) return
@@ -49,20 +52,39 @@ export function Navbar() {
         setSidebarClosing(false)
         setSidebarOpen(false)
       }
+      if (window.innerWidth < 1280) {
+        closeMenu()
+      }
     }
 
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [clearCloseTimer, sidebarOpen])
+  }, [clearCloseTimer, sidebarOpen, closeMenu])
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!headerRef.current?.contains(event.target as Node)) {
+        closeMenu()
+      }
+    }
+    if (activeMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [activeMenu, closeMenu])
 
   return (
     <>
       <header
+        ref={headerRef}
         className={`sticky top-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? 'border-b border-gray-100 bg-white/90 shadow-sm backdrop-blur-md'
+          scrolled || activeMenu
+            ? 'border-b border-gray-100 bg-white/95 shadow-sm backdrop-blur-md'
             : 'bg-white'
         }`}
+        onMouseLeave={() => {
+          if (activeMenu) closeMenu()
+        }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6 sm:py-4 xl:px-10">
           <div className="flex min-w-0 items-center gap-3">
@@ -76,33 +98,23 @@ export function Navbar() {
               <HiOutlineBars3 className="size-6" />
             </button>
 
-            <Link to="/" className="group shrink-0 transition-transform duration-300 hover:scale-[1.02]">
-              <BrandLogo size="md" className="group-hover:scale-105" />
+            <Link
+              to="/"
+              className="group shrink-0 transition-transform duration-300 hover:scale-[1.02]"
+              onClick={closeMenu}
+            >
+              <BrandLogo size="lg" className="group-hover:scale-105" />
             </Link>
           </div>
 
-          <nav className="hidden items-center gap-5 xl:flex xl:gap-7">
-            {siteNavLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="nav-link-underline text-[11px] font-semibold tracking-wide text-brand-teal uppercase transition-colors hover:text-brand-sea xl:text-xs"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
+          <DesktopNav activeMenu={activeMenu} onMenuChange={setActiveMenu} />
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <CartButton />
-            <a
-              href="/#contact"
-              className="hidden rounded-full border border-brand-teal/20 px-4 py-2 text-xs font-semibold text-brand-teal transition-all hover:border-brand-sea hover:bg-brand-cream xl:inline-flex"
-            >
-              Contact us
-            </a>
           </div>
         </div>
+
+        <MegaMenuPanel activeMenu={activeMenu} onClose={closeMenu} />
       </header>
 
       <NavSidebar isOpen={sidebarOpen} isClosing={sidebarClosing} onClose={closeSidebar} />

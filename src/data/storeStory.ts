@@ -1,5 +1,6 @@
 import type { BrandLine } from './productBrand'
 import { brandLines } from './productBrand'
+import { lifestyleAssets, wellnessAssets, wellnessGalleryImages } from './siteAssets'
 
 export type StorePillar = {
   title: string
@@ -11,7 +12,6 @@ export type ProductCategoryShowcase = {
   key: string
   label: string
   description: string
-  image: string
   productCount: number
 }
 
@@ -30,18 +30,18 @@ export const storeIntro = {
   ],
   collageImages: [
     {
-      src: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&h=700&fit=crop',
-      alt: 'Polisupport premium botanical oil',
+      src: '/products/max.png',
+      alt: 'Polisupport MAX line',
       className: 'top-0 left-0 z-10 w-[58%]',
     },
     {
-      src: 'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=500&h=500&fit=crop',
-      alt: 'Wellness gummies',
+      src: '/products/harmony.png',
+      alt: 'Polisupport HARMONY line',
       className: 'top-[12%] right-0 z-20 w-[52%]',
     },
     {
-      src: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=550&fit=crop',
-      alt: 'Topicals and natural care',
+      src: '/products/pure.png',
+      alt: 'Polisupport PURE line',
       className: 'bottom-0 left-[18%] z-30 w-[48%]',
     },
   ],
@@ -52,19 +52,19 @@ export const storePillars: StorePillar[] = [
     title: 'Full spectrum',
     description:
       'Full and broad spectrum extracts that preserve natural cannabinoids and terpenes for a complete botanical experience.',
-    image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=700&h=500&fit=crop',
+    image: '/products/max.png',
   },
   {
     title: 'Lab tested',
     description:
       'Every batch undergoes independent purity, potency, and contaminant testing — with lab reports available.',
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=700&h=500&fit=crop',
+    image: lifestyleAssets.labs,
   },
   {
     title: 'Selected ingredients',
     description:
       'Traceable raw materials with no artificial preservatives. Clean formulas for conscious, daily use.',
-    image: 'https://images.unsplash.com/photo-1546173159-315724a31696?w=700&h=500&fit=crop',
+    image: wellnessAssets.energy,
   },
 ]
 
@@ -82,56 +82,41 @@ export const productCategories: ProductCategoryShowcase[] = [
     key: 'oil',
     label: 'Oils',
     description: 'High-potency sublingual drops for balance and relaxation.',
-    image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&h=450&fit=crop',
     productCount: 4,
   },
   {
     key: 'caplets',
     label: 'Capsules',
     description: 'Precise dosing in a practical format for daily routines.',
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=450&fit=crop',
     productCount: 4,
   },
   {
     key: 'gummies',
     label: 'Gummies',
     description: 'Premium flavor with portability — wellness you can take anywhere.',
-    image: 'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=600&h=450&fit=crop',
     productCount: 4,
   },
   {
     key: 'topicals',
     label: 'Topicals',
     description: 'Balms, creams, and sprays for local care and recovery.',
-    image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=450&fit=crop',
     productCount: 4,
   },
   {
     key: 'drinks',
     label: 'Drinks',
     description: 'Functional shots and teas ready for immediate consumption.',
-    image: 'https://images.unsplash.com/photo-1546173159-315724a31696?w=600&h=450&fit=crop',
     productCount: 3,
   },
   {
     key: 'pod-vape',
     label: 'Pod Vape',
     description: 'Advanced technology with smooth vapor and a refined experience.',
-    image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=600&h=450&fit=crop',
     productCount: 3,
   },
 ]
 
-export const galleryImages = [
-  'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=500&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=500&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1622484214629-906bbbf33663?w=500&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=500&h=400&fit=crop',
-]
+export const galleryImages = [...wellnessGalleryImages]
 
 export const experienceSteps: ExperienceStep[] = [
   {

@@ -1,6 +1,7 @@
 import type { ProductCategory } from './productDetails'
 import type { BrandLine } from './productBrand'
 import { getProductColor } from './productBrand'
+import { getBrandLineImage } from './productImages'
 import type { PathologyId } from './pathologies'
 
 export type ShowcaseProduct = {
@@ -240,9 +241,25 @@ const catalogProducts: ShowcaseProduct[] = [
   },
 ]
 
-export const showcaseProducts = catalogProducts.filter(
-  (product) => !EXCLUDED_BRAND_LINES.includes(product.brandLine),
-)
+export const popularProductIds = ['1', '3', '2', '17', '13'] as const
+
+export const showcaseProducts = catalogProducts
+  .filter((product) => !EXCLUDED_BRAND_LINES.includes(product.brandLine))
+  .map((product) => {
+    const image = getBrandLineImage(product.brandLine)
+    return {
+      ...product,
+      image,
+      imageHover: image,
+      images: product.images ?? [image],
+    }
+  })
+
+export function getPopularProducts(): ShowcaseProduct[] {
+  return popularProductIds
+    .map((id) => getProductById(id))
+    .filter((p): p is ShowcaseProduct => p !== undefined)
+}
 
 /** @deprecated use product.brandLine + getProductColor */
 export function productColor(product: ShowcaseProduct): string {
