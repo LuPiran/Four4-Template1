@@ -1,4 +1,5 @@
 import type { ProductCategory } from './productDetails'
+import { isActiveProductCategory } from './catalogConfig'
 import type { BrandLine } from './productBrand'
 import { getProductColor } from './productBrand'
 import { getBrandLineImage } from './productImages'
@@ -193,7 +194,7 @@ const catalogProducts: ShowcaseProduct[] = [
     id: '17',
     name: 'Night Drops Oil 900mg',
     price: 84,
-    brandLine: 'max',
+    brandLine: 'rest',
     pathologies: ['sleep', 'stress'],
     category: 'oil',
     image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=500&h=500&fit=crop',
@@ -239,12 +240,91 @@ const catalogProducts: ShowcaseProduct[] = [
     image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=500&h=500&fit=crop',
     imageHover: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=500&fit=crop',
   },
+  {
+    id: '23',
+    name: 'Everyday Vitality Oil 600mg',
+    price: 72,
+    brandLine: 'daily',
+    pathologies: ['energy', 'focus'],
+    category: 'oil',
+    image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&h=500&fit=crop',
+    imageHover: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=500&h=500&fit=crop',
+    description:
+      'A balanced daily oil from the DAILY line for steady vitality, focus, and everyday wellness support.',
+    highlights: [
+      '600mg per bottle — ideal for daily routines',
+      'Light, consistent botanical profile',
+      'Independently lab tested',
+      'Morning or midday use',
+    ],
+    howToUse:
+      'Shake well before use. Place drops under the tongue, hold for 60 seconds, and swallow. Best taken at the same time each day.',
+    ingredients: [
+      'Broad spectrum botanical extract',
+      'Organic hemp seed oil',
+      'Natural terpenes',
+      'No artificial preservatives',
+    ],
+  },
+  {
+    id: '24',
+    name: 'Mental Clarity Oil 750mg',
+    price: 76,
+    brandLine: 'harmony',
+    pathologies: ['focus', 'anxiety', 'stress'],
+    category: 'oil',
+    image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=500&h=500&fit=crop',
+    imageHover: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&h=500&fit=crop',
+    description:
+      'HARMONY-line oil designed for mental clarity, calm focus, and balanced performance throughout the day.',
+    highlights: [
+      '750mg per bottle — clarity-focused formula',
+      'Smooth sublingual delivery',
+      'Independently lab tested',
+      'Focus and calm support',
+    ],
+    howToUse:
+      'Shake well before use. Apply sublingual drops as directed and hold for 60 seconds before swallowing. Use during focus-heavy tasks or study sessions.',
+    ingredients: [
+      'Broad spectrum botanical extract',
+      'Organic hemp seed oil',
+      'Focus-oriented terpene blend',
+      'No artificial preservatives',
+    ],
+  },
+  {
+    id: '25',
+    name: 'Active Recovery Oil 800mg',
+    price: 82,
+    brandLine: 'active',
+    pathologies: ['recovery', 'pain', 'energy'],
+    category: 'oil',
+    image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&h=500&fit=crop',
+    imageHover: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=500&h=500&fit=crop',
+    description:
+      'ACTIVE-line oil for post-workout recovery, muscular comfort, and sustained energy in active lifestyles.',
+    highlights: [
+      '800mg per bottle — performance-oriented dosage',
+      'Formulated for recovery routines',
+      'Independently lab tested',
+      'Post-activity support',
+    ],
+    howToUse:
+      'Shake well before use. Take sublingual drops after physical activity or as part of your recovery routine. Hold under the tongue for 60 seconds.',
+    ingredients: [
+      'Full spectrum botanical extract',
+      'Organic hemp seed oil',
+      'Recovery-focused terpene blend',
+      'No artificial preservatives',
+    ],
+  },
 ]
 
-export const popularProductIds = ['1', '3', '2', '17', '13'] as const
+export const popularProductIds = ['1', '11', '17', '23', '24', '25'] as const
 
 export const showcaseProducts = catalogProducts
   .filter((product) => !EXCLUDED_BRAND_LINES.includes(product.brandLine))
+  .filter((product) => isActiveProductCategory(product.category))
   .map((product) => {
     const image = getBrandLineImage(product.brandLine)
     return {

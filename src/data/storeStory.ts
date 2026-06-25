@@ -82,37 +82,7 @@ export const productCategories: ProductCategoryShowcase[] = [
     key: 'oil',
     label: 'Oils',
     description: 'High-potency sublingual drops for balance and relaxation.',
-    productCount: 4,
-  },
-  {
-    key: 'caplets',
-    label: 'Capsules',
-    description: 'Precise dosing in a practical format for daily routines.',
-    productCount: 4,
-  },
-  {
-    key: 'gummies',
-    label: 'Gummies',
-    description: 'Premium flavor with portability — wellness you can take anywhere.',
-    productCount: 4,
-  },
-  {
-    key: 'topicals',
-    label: 'Topicals',
-    description: 'Balms, creams, and sprays for local care and recovery.',
-    productCount: 4,
-  },
-  {
-    key: 'drinks',
-    label: 'Drinks',
-    description: 'Functional shots and teas ready for immediate consumption.',
-    productCount: 3,
-  },
-  {
-    key: 'pod-vape',
-    label: 'Pod Vape',
-    description: 'Advanced technology with smooth vapor and a refined experience.',
-    productCount: 3,
+    productCount: 6,
   },
 ]
 
@@ -127,7 +97,7 @@ export const experienceSteps: ExperienceStep[] = [
   {
     step: '02',
     title: 'Explore the catalog',
-    description: 'Oils, capsules, gummies, topicals, drinks, and pods — find the ideal format for your routine.',
+    description: 'Premium sublingual oils across our wellness lines — find the ideal formula for your routine.',
   },
   {
     step: '03',

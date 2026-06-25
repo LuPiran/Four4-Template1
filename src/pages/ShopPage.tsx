@@ -6,6 +6,7 @@ import { ProductCard } from '../components/products/ProductCard'
 import { showcaseProducts } from '../data/products'
 import type { ProductCategory } from '../data/productDetails'
 import { categoryLabels } from '../data/productDetails'
+import { ACTIVE_PRODUCT_CATEGORIES } from '../data/catalogConfig'
 import type { BrandLine } from '../data/productBrand'
 import type { PathologyId } from '../data/pathologies'
 import { pathologyLabels } from '../data/pathologies'
@@ -19,11 +20,13 @@ import {
 
 const categoryFilters: { id: ProductCategory | 'all'; label: string }[] = [
   { id: 'all', label: 'All' },
-  ...(Object.entries(categoryLabels) as [ProductCategory, string][]).map(([id, label]) => ({
+  ...ACTIVE_PRODUCT_CATEGORIES.map((id) => ({
     id,
-    label,
+    label: categoryLabels[id],
   })),
 ]
+
+const showCategoryFilters = ACTIVE_PRODUCT_CATEGORIES.length > 1
 
 export function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -112,24 +115,26 @@ export function ShopPage() {
           )}
         </ScrollReveal>
 
-        <ScrollReveal delay={60}>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {categoryFilters.map((filter) => (
-              <button
-                key={filter.id}
-                type="button"
-                onClick={() => handleCategoryChange(filter.id)}
-                className={`font-display rounded-full border px-4 py-2 text-xs font-semibold tracking-wide uppercase transition-colors ${
-                  category === filter.id
-                    ? 'border-brand-teal bg-brand-teal text-white'
-                    : 'border-gray-200 bg-white text-brand-charcoal/70 hover:border-brand-sea/40'
-                }`}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-        </ScrollReveal>
+        {showCategoryFilters && (
+          <ScrollReveal delay={60}>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {categoryFilters.map((filter) => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  onClick={() => handleCategoryChange(filter.id)}
+                  className={`font-display rounded-full border px-4 py-2 text-xs font-semibold tracking-wide uppercase transition-colors ${
+                    category === filter.id
+                      ? 'border-brand-teal bg-brand-teal text-white'
+                      : 'border-gray-200 bg-white text-brand-charcoal/70 hover:border-brand-sea/40'
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+          </ScrollReveal>
+        )}
 
         {filteredProducts.length === 0 ? (
           <ScrollReveal className="mt-10 text-center text-sm text-brand-charcoal/60" delay={100}>

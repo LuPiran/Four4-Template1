@@ -2,6 +2,7 @@ import type { BrandLine } from './productBrand'
 import { brandLines } from './productBrand'
 import type { ProductCategory } from './productDetails'
 import { categoryLabels } from './productDetails'
+import { ACTIVE_PRODUCT_CATEGORIES } from './catalogConfig'
 import { buildShopUrl } from '../utils/shopFilters'
 
 export type MegaMenuLink = {
@@ -16,19 +17,18 @@ export type MegaMenuColumn = {
 
 const EXCLUDED_LINES: BrandLine[] = ['balance', 'power']
 
-const categoryOrder: ProductCategory[] = ['oil', 'caplets', 'gummies', 'topicals', 'drinks', 'pod-vape']
+const categoryOrder: ProductCategory[] = ACTIVE_PRODUCT_CATEGORIES
 
 export const productsMegaMenuColumns: MegaMenuColumn[] = [
   {
     title: 'Shop all',
-    links: [{ label: 'All products', to: buildShopUrl() }],
-  },
-  {
-    title: 'By format',
-    links: categoryOrder.map((category) => ({
-      label: categoryLabels[category],
-      to: buildShopUrl({ category }),
-    })),
+    links: [
+      { label: 'All products', to: buildShopUrl() },
+      ...categoryOrder.map((category) => ({
+        label: categoryLabels[category],
+        to: buildShopUrl({ category }),
+      })),
+    ],
   },
   {
     title: 'By line',

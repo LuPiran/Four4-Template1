@@ -151,6 +151,7 @@ export function AboutStoreSection({ compact = false, introSurface = 'cream' }: A
         </div>
       </div>
 
+      {productCategories.length > 1 && (
       <div className={`bg-brand-teal text-white ${innerPy}`}>
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <ScrollReveal className="mx-auto max-w-2xl text-center">
@@ -189,6 +190,7 @@ export function AboutStoreSection({ compact = false, introSurface = 'cream' }: A
           </div>
         </div>
       </div>
+      )}
 
       <div className={`border-t border-brand-teal/10 ${introBg} ${sectionPy}`}>
         <div className="mx-auto max-w-7xl px-6 lg:px-10">

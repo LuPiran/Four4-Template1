@@ -2,6 +2,7 @@ import type { BrandLine } from '../data/productBrand'
 import type { ProductCategory } from '../data/productDetails'
 import type { PathologyId } from '../data/pathologies'
 import { categoryLabels } from '../data/productDetails'
+import { ACTIVE_PRODUCT_CATEGORIES } from '../data/catalogConfig'
 import { brandLines } from '../data/productBrand'
 import { pathologyLabels } from '../data/pathologies'
 
@@ -11,7 +12,7 @@ export type ShopFilter = {
   line?: BrandLine
 }
 
-const VALID_CATEGORIES = new Set(Object.keys(categoryLabels))
+const VALID_CATEGORIES = new Set<ProductCategory>(ACTIVE_PRODUCT_CATEGORIES)
 const VALID_LINES = new Set(Object.keys(brandLines))
 const VALID_WELLNESS = new Set(Object.keys(pathologyLabels))
 
@@ -28,7 +29,7 @@ export function parseShopFilters(searchParams: URLSearchParams): ShopFilter {
   const filter: ShopFilter = {}
 
   const category = searchParams.get('category')
-  if (category && VALID_CATEGORIES.has(category)) {
+  if (category && VALID_CATEGORIES.has(category as ProductCategory)) {
     filter.category = category as ProductCategory
   }
 
